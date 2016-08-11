@@ -1,5 +1,6 @@
 package com.rhythm003.type1;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,12 +32,14 @@ public class LoginActivity extends AppCompatActivity {
     private Button btLogin;
     private Button btReg;
     private SessionManager session;
-    private SQLiteHandler db;
+    //private SQLiteHandler db;
     private static final String TAG = LoginActivity.class.getSimpleName();
+    //private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //pDialog = new ProgressDialog(getApplicationContext());
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPass = (EditText) findViewById(R.id.etPass);
         btLogin = (Button) findViewById(R.id.btLogin);
@@ -50,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        //db = new SQLiteHandler(getApplicationContext());
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -92,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         String tag_string_req = "req_login";
 
         //pDialog.setMessage("Logging in ...");
-        //showDialog();
+        //pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_LOGIN, new Response.Listener<String>() {
@@ -100,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response.toString());
-                //hideDialog();
+                //pDialog.hide();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -110,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (!error) {
                         // user successfully logged in
                         // Create login session
-                        session.setLogin(jObj.getString("uid"), jObj.getJSONObject("user").getString("name"), etEmail.getText().toString().trim(), etPass.getText().toString().trim());
+                        session.setLogin(jObj.getString("uid"), jObj.getString("name"), etEmail.getText().toString().trim(), etPass.getText().toString().trim());
 
                         // Now store the user in SQLite
 //                        String uid = jObj.getString("uid");
@@ -149,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "Login Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
-                //hideDialog();
+                //pDialog.hide();
             }
         }) {
 

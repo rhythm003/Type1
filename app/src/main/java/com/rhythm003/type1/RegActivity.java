@@ -1,5 +1,6 @@
 package com.rhythm003.type1;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,12 +31,14 @@ public class RegActivity extends AppCompatActivity {
     private EditText etName;
     private Button btReg;
     private SessionManager session;
-    private SQLiteHandler db;
+    //private SQLiteHandler db;
     private static final String TAG = RegActivity.class.getSimpleName();
+    //private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg);
+        //pDialog = new ProgressDialog(getApplicationContext());
         etEmail = (EditText) findViewById(R.id.etEmail2);
         etPass = (EditText) findViewById(R.id.etPass2);
         etName = (EditText) findViewById(R.id.etName);
@@ -47,7 +50,7 @@ public class RegActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
 
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        //db = new SQLiteHandler(getApplicationContext());
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
@@ -85,7 +88,7 @@ public class RegActivity extends AppCompatActivity {
         String tag_string_req = "req_register";
 
         //pDialog.setMessage("Registering ...");
-        //showDialog();
+        //pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_REGISTER, new Response.Listener<String>() {
@@ -93,7 +96,7 @@ public class RegActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Register Response: " + response.toString());
-                //hideDialog();
+                //pDialog.hide();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -101,16 +104,16 @@ public class RegActivity extends AppCompatActivity {
                     if (!error) {
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
+                        //String uid = jObj.getString("uid");
 
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
-                        String created_at = user
-                                .getString("created_at");
+                        //JSONObject user = jObj.getJSONObject("user");
+                        //String name = user.getString("name");
+                        //String email = user.getString("email");
+                        //String created_at = user
+                        //        .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at);
+                        //db.addUser(name, email, uid, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -140,7 +143,7 @@ public class RegActivity extends AppCompatActivity {
                 Log.e(TAG, "Registration Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
-                //hideDialog();
+                //pDialog.hide();
             }
         }) {
 
