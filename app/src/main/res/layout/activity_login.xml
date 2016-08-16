@@ -19,7 +19,8 @@
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@android:color/primary_text_light" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -57,13 +58,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Login"
-                android:id="@+id/btLogin" />
+                android:id="@+id/btLogin"
+                android:background="@android:color/holo_blue_light" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign up"
-                android:id="@+id/btReg" />
+                android:id="@+id/btReg"
+                android:background="@android:color/holo_blue_light" />
         </LinearLayout>
 
     </LinearLayout>

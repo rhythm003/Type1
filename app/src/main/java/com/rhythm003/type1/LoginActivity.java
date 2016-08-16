@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (!error) {
                         // user successfully logged in
                         // Create login session
-                        session.setLogin(jObj.getString("uid"), jObj.getString("name"), etEmail.getText().toString().trim(), etPass.getText().toString().trim());
+                        session.setLogin(jObj.getString("name"), jObj.getString("email"), jObj.getString("apikey"));
 
                         // Now store the user in SQLite
 //                        String uid = jObj.getString("uid");

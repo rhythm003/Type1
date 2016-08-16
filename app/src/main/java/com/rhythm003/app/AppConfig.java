@@ -5,10 +5,10 @@ package com.rhythm003.app;
  */
 public class AppConfig {
     // Server user login url
-    public static String URL_LOGIN = "http://10.0.0.19:8888/type1_api/v1/login";
+    public static String URL_LOGIN = "http://rhythm003.noip.me:8080/type1_api/v1/login";
 
     // Server user register url
-    public static String URL_REGISTER = "htto://10.0.0.19:8888/type1_api/v1/register";
+    public static String URL_REGISTER = "http://rhythm003.noip.me:8080/type1_api/v1/register";
 
-    public static String URL_GLU = "http://10.0.0.19:8888/type1_api/v1/glucose/2";
+    public static String URL_GLU = "http://rhythm003.noip.me:8080/type1_api/v1/glucose";
 }
