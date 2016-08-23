@@ -3,6 +3,7 @@ package com.rhythm003.type1;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,19 +26,24 @@ import com.rhythm003.app.AppConfig;
 import com.rhythm003.app.AppController;
 import com.rhythm003.help.SessionManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GluActivity extends AppCompatActivity {
+    private static final String TAG = GluActivity.class.getSimpleName();
     private XYPlot xyplot;
     private EditText glu_etLevel;
     private Button glu_btUpdate;
@@ -50,40 +56,17 @@ public class GluActivity extends AppCompatActivity {
         glu_etLevel = (EditText) findViewById(R.id.et_glu_level);
         glu_btUpdate = (Button) findViewById(R.id.bt_glu_update);
         xyplot = (XYPlot) findViewById(R.id.glu_plot);
-        Number[] levels = {200, 190, 150, 160, 175};
-        long now = (new Date()).getTime();
-        Number[] times = {now, now + 3600000, now + 7200000, now + 10800000, now + 14400000};
-        XYSeries series = new SimpleXYSeries(Arrays.asList(times), Arrays.asList(levels), "Glucose level");
-        xyplot.getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
-        PointLabelFormatter pointLabelFormatter = new PointLabelFormatter(Color.BLACK);
-        LineAndPointFormatter formatter = new LineAndPointFormatter(Color.rgb(0, 0, 0), Color.BLUE, Color.TRANSPARENT, pointLabelFormatter);
-        formatter.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));
-        xyplot.addSeries(series, formatter);
-        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, times.length);
-        xyplot.setTicksPerRangeLabel(5);
-        xyplot.setRangeBoundaries(100, 250, BoundaryMode.FIXED);
-
-        xyplot.setDomainValueFormat(new Format() {
-            private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            @Override
-            public StringBuffer format(Object o, StringBuffer stringBuffer, FieldPosition fieldPosition) {
-                Date date = new Date(((Number) o).longValue());
-                return dateFormat.format(date, stringBuffer, fieldPosition);
-            }
-
-            @Override
-            public Object parseObject(String s, ParsePosition parsePosition) {
-                return null;
-            }
-        });
+        xyplot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, 20);
+        xyplot.setRangeValueFormat(new DecimalFormat("0"));
+        xyplot.setRangeBoundaries(130, 250, BoundaryMode.FIXED);
+        getGluLevel();
         glu_btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String level = glu_etLevel.getText().toString().trim();
                 String devicetime = Long.toString((new Date()).getTime());
-                Toast.makeText(getApplicationContext(), devicetime, Toast.LENGTH_SHORT).show();
                 postGluLevel(level, devicetime);
-                //getGluLevel();
+
             }
         });
     }
@@ -97,12 +80,52 @@ public class GluActivity extends AppCompatActivity {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-                    if (!error) {
-                        Toast.makeText(getApplicationContext(), jObj.toString(), Toast.LENGTH_SHORT).show();
+                    if (!error && jObj.getJSONArray("glurec").length() > 0) {
+                        //Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_SHORT).show();
+                        xyplot.clear();
+                        List<Number> level_list = new ArrayList<>();
+                        List<Number> time_list = new ArrayList<>();
+                        JSONArray glurec = jObj.getJSONArray("glurec");
+                        for(int i = 0; i < glurec.length(); i++) {
+                            level_list.add(glurec.getJSONObject(i).getDouble("level"));
+                            time_list.add(glurec.getJSONObject(i).getLong("devicetime"));
+                        }
+
+                        XYSeries series = new SimpleXYSeries(time_list, level_list, "Glucose level");
+                        xyplot.getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
+                        PointLabelFormatter pointLabelFormatter = new PointLabelFormatter(Color.BLACK);
+                        LineAndPointFormatter formatter = new LineAndPointFormatter(Color.rgb(0, 0, 0), Color.BLUE, Color.TRANSPARENT, pointLabelFormatter);
+                        if(level_list.size() > 5) {
+                            formatter.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Uniform));
+                        }
+                        xyplot.addSeries(series, formatter);
+                        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, time_list.size());
+
+                        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, time_list.size());
+                        xyplot.getGraphWidget().setDomainLabelOrientation(-45);
+                        //xyplot.setDomainBoundaries(times[0], times[times.length -1], BoundaryMode.FIXED);
+                        xyplot.setDomainValueFormat(new Format() {
+                            private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                            @Override
+                            public StringBuffer format(Object o, StringBuffer stringBuffer, FieldPosition fieldPosition) {
+                                Date date = new Date(((Number) o).longValue());
+                                return dateFormat.format(date, stringBuffer, fieldPosition);
+                            }
+
+                            @Override
+                            public Object parseObject(String s, ParsePosition parsePosition) {
+                                return null;
+                            }
+                        });
+
+                        xyplot.redraw();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    //Toast.makeText(getApplicationContext(), "Error fetching data", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Error fetching data");
                 }
+
             }
 
 
@@ -132,7 +155,10 @@ public class GluActivity extends AppCompatActivity {
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                        getGluLevel();
+                        glu_etLevel.setText("");
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
