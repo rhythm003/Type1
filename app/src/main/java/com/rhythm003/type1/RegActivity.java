@@ -116,7 +116,7 @@ public class RegActivity extends AppCompatActivity {
                         //db.addUser(name, email, uid, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
-
+                        session.clearPreff();
                         // Launch login activity
                         Intent intent = new Intent(
                                 RegActivity.this,

@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         btGetLevel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date now = new Date();
-                Toast.makeText(getApplicationContext(), now.toString(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), GluActivity.class);
                 startActivity(intent);
             }

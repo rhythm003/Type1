@@ -48,7 +48,12 @@ public class SessionManager {
         editor.commit();
         Log.d(TAG, "User login session modified!(logoff)");
     }
-
+    public void clearPreff() {
+        editor.putString("USER_NAME", "");
+        editor.putString("USER_EMAIL", "");
+        editor.putString("USER_APIKEY", "");
+        editor.commit();
+    }
     public String getUSER_NAME() {
         return pref.getString("USER_NAME", "");
     }
