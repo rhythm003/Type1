@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait">
@@ -20,8 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".RegActivity"></activity>
+        <activity
+            android:name=".MainActivity" />
+        <activity android:name=".RegActivity" />
+        <activity
+            android:name=".GluActivity"
+            android:parentActivityName="com.rhythm003.type1.MainActivity"
+            android:theme="@style/AppThemeAC" >
+        </activity>
     </application>
 
 </manifest>

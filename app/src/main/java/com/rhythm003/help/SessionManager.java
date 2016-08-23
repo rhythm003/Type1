@@ -31,14 +31,13 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void setLogin(String uid, String name, String email, String pass) {
+    public void setLogin(String name, String email, String apikey) {
 
         editor.putBoolean(KEY_IS_LOGGEDIN, true);
         // commit changes
-        editor.putString("USER_ID", uid);
         editor.putString("USER_NAME", name);
         editor.putString("USER_EMAIL", email);
-        editor.putString("USER_PASS", pass);
+        editor.putString("USER_APIKEY", apikey);
         editor.commit();
 
         Log.d(TAG, "User login session modified!(login)");
@@ -55,6 +54,9 @@ public class SessionManager {
     }
     public String getUSER_EMAIL() {
         return pref.getString("USER_EMAIL", "");
+    }
+    public String getUSER_APIKEY() {
+        return pref.getString("USER_APIKEY", "");
     }
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
