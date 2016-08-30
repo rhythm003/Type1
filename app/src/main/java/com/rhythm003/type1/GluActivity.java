@@ -1,9 +1,11 @@
 package com.rhythm003.type1;
 
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.androidplot.Plot;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.CatmullRomInterpolator;
 import com.androidplot.xy.LineAndPointFormatter;
@@ -41,13 +44,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class GluActivity extends AppCompatActivity {
+public class GluActivity extends AppCompatActivity implements View.OnTouchListener{
     private static final String TAG = GluActivity.class.getSimpleName();
     private XYPlot xyplot;
     private EditText glu_etLevel;
     private Button glu_btUpdate;
     private SessionManager session;
+    private float leftX;
+    private float rightX;
+    private PointF minXY;
+    private PointF maxXY;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +65,14 @@ public class GluActivity extends AppCompatActivity {
         glu_etLevel = (EditText) findViewById(R.id.et_glu_level);
         glu_btUpdate = (Button) findViewById(R.id.bt_glu_update);
         xyplot = (XYPlot) findViewById(R.id.glu_plot);
+        xyplot.setOnTouchListener(this);
+        //xyplot.setMarkupEnabled(true);
+        xyplot.getGraphWidget().setMarginTop(0);
+        xyplot.setPlotMargins(0, 0, 0, 0);
         xyplot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, 20);
         xyplot.setRangeValueFormat(new DecimalFormat("0"));
         xyplot.setRangeBoundaries(130, 250, BoundaryMode.FIXED);
+        xyplot.getGraphWidget().setDomainLabelOrientation(-45);
         getGluLevel();
         glu_btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,20 +104,32 @@ public class GluActivity extends AppCompatActivity {
                             level_list.add(glurec.getJSONObject(i).getDouble("level"));
                             time_list.add(glurec.getJSONObject(i).getLong("devicetime"));
                         }
+                        if(level_list.size() == 1) {
+                            xyplot.setDomainBoundaries(time_list.get(0).longValue() - 100, time_list.get(0).longValue() + 100, BoundaryMode.FIXED);
+                        }
 
                         XYSeries series = new SimpleXYSeries(time_list, level_list, "Glucose level");
                         xyplot.getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
                         PointLabelFormatter pointLabelFormatter = new PointLabelFormatter(Color.BLACK);
                         LineAndPointFormatter formatter = new LineAndPointFormatter(Color.rgb(0, 0, 0), Color.BLUE, Color.TRANSPARENT, pointLabelFormatter);
-                        if(level_list.size() > 5) {
-                            formatter.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Uniform));
+//                        if(level_list.size() > 5) {
+//                            formatter.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Uniform));
+//                        }
+                        if(level_list.size() <= 3) {
+                            xyplot.setOnTouchListener(null);
+                        }
+                        else {
+                            xyplot.setOnTouchListener(GluActivity.this);
                         }
                         xyplot.addSeries(series, formatter);
-                        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, time_list.size());
+                        xyplot.calculateMinMaxVals();
+                        minXY = new PointF(xyplot.getCalculatedMinX().floatValue(), xyplot.getCalculatedMinY().floatValue());
+                        maxXY = new PointF(xyplot.getCalculatedMaxX().floatValue(), xyplot.getCalculatedMaxY().floatValue());
+                        leftX = minXY.x;
+                        rightX = maxXY.x;
+                        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, 10);
+                        //xyplot.setDomainBoundaries(maxXY.x - 43600000, maxXY.x, BoundaryMode.AUTO);
 
-                        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, time_list.size());
-                        xyplot.getGraphWidget().setDomainLabelOrientation(-45);
-                        //xyplot.setDomainBoundaries(times[0], times[times.length -1], BoundaryMode.FIXED);
                         xyplot.setDomainValueFormat(new Format() {
                             private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                             @Override
@@ -119,6 +145,7 @@ public class GluActivity extends AppCompatActivity {
                         });
 
                         xyplot.redraw();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -188,5 +215,91 @@ public class GluActivity extends AppCompatActivity {
             }
         };
         AppController.getInstance().addToRequestQueue(strReq, req_tag);
+    }
+
+    // Definition of the touch states
+    static final int NONE = 0;
+    static final int ONE_FINGER_DRAG = 1;
+    static final int TWO_FINGERS_DRAG = 2;
+    int mode = NONE;
+
+    PointF firstFinger;
+    float distBetweenFingers;
+    boolean stopThread = false;
+
+    @Override
+    public boolean onTouch(View arg0, MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN: // Start gesture
+                firstFinger = new PointF(event.getX(), event.getY());
+                mode = ONE_FINGER_DRAG;
+                stopThread = true;
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN: // second finger
+                distBetweenFingers = spacing(event);
+                // the distance check is done to avoid false alarms
+                if (distBetweenFingers > 5f) {
+                    mode = TWO_FINGERS_DRAG;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mode == ONE_FINGER_DRAG) {
+                    PointF oldFirstFinger = firstFinger;
+                    firstFinger = new PointF(event.getX(), event.getY());
+                    scroll(oldFirstFinger.x - firstFinger.x);
+                    xyplot.setDomainBoundaries(minXY.x, maxXY.x,
+                            BoundaryMode.FIXED);
+                    xyplot.redraw();
+
+                } else if (mode == TWO_FINGERS_DRAG) {
+                    float oldDist = distBetweenFingers;
+                    distBetweenFingers = spacing(event);
+                    zoom(oldDist / distBetweenFingers);
+                    xyplot.setDomainBoundaries(minXY.x, maxXY.x,
+                            BoundaryMode.FIXED);
+                    xyplot.redraw();
+                }
+                break;
+        }
+        return true;
+    }
+
+    private void zoom(float scale) {
+        float domainSpan = maxXY.x - minXY.x;
+        float domainMidPoint = maxXY.x - domainSpan / 2.0f;
+        float offset = domainSpan * scale / 2.0f;
+
+        minXY.x = domainMidPoint - offset;
+        maxXY.x = domainMidPoint + offset;
+//        if(minXY.x < leftX) {
+//            minXY.x = leftX;
+//        }
+//        if(maxXY.x > rightX) {
+//            maxXY.x = rightX;
+//        }
+    }
+
+    private void scroll(float pan) {
+        float domainSpan = maxXY.x - minXY.x;
+        float step = domainSpan / xyplot.getWidth();
+        float offset = pan * step;
+        minXY.x = minXY.x + offset;
+        maxXY.x = maxXY.x + offset;
+//        if(minXY.x < leftX) {
+//            minXY.x = leftX;
+//        }
+//        if(maxXY.x > rightX) {
+//            maxXY.x = rightX;
+//        }
+    }
+
+    private float spacing(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return (float) Math.hypot(x, y);
     }
 }
