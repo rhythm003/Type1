@@ -6,3 +6,7 @@ http://www.androidhive.info/2014/01/how-to-create-rest-api-for-android-app-using
 This is an Android app to help type 1 diabetic patients to minitor blood glucose level, calorie intake and heart rate.
 
 It retrieves and posts data to a database through RESTful API using Volley.
+
+Androidplot is used to plot the data
+
+http://androidplot.com/
