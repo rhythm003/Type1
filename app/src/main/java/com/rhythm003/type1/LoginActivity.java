@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.rhythm003.app.AppConfig;
 import com.rhythm003.app.AppController;
-import com.rhythm003.help.SQLiteHandler;
+
 import com.rhythm003.help.SessionManager;
 
 import org.json.JSONException;
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btLogin;
     private Button btReg;
     private SessionManager session;
-    //private SQLiteHandler db;
+
     private static final String TAG = LoginActivity.class.getSimpleName();
     //private ProgressDialog pDialog;
     @Override
@@ -53,8 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // SQLite database handler
-        //db = new SQLiteHandler(getApplicationContext());
+
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -95,8 +94,6 @@ public class LoginActivity extends AppCompatActivity {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-        //pDialog.setMessage("Logging in ...");
-        //pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_LOGIN, new Response.Listener<String>() {
@@ -117,13 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                         session.setLogin(jObj.getString("name"), jObj.getString("email"), jObj.getString("apikey"));
 
                         // Now store the user in SQLite
-//                        String uid = jObj.getString("uid");
-//
-//                        JSONObject user = jObj.getJSONObject("user");
-//                        String name = user.getString("name");
-//                        String email = user.getString("email");
-//                        String created_at = user
-//                                .getString("created_at");
+
 
                         // Inserting row in users table
                         // db.addUser(name, email, uid, created_at);

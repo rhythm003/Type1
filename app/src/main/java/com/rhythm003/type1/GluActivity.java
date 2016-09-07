@@ -1,10 +1,14 @@
 package com.rhythm003.type1;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +31,8 @@ import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
 import com.rhythm003.app.AppConfig;
 import com.rhythm003.app.AppController;
+import com.rhythm003.help.DbHelper;
+import com.rhythm003.help.PeriodicService;
 import com.rhythm003.help.SessionManager;
 
 import org.json.JSONArray;
@@ -50,39 +56,115 @@ import java.util.TimerTask;
 public class GluActivity extends AppCompatActivity implements View.OnTouchListener{
     private static final String TAG = GluActivity.class.getSimpleName();
     private XYPlot xyplot;
-    private EditText glu_etLevel;
-    private Button glu_btUpdate;
+    private Button glu_btStart;
+    private Button glu_btStop;
     private SessionManager session;
     private float leftX;
     private float rightX;
     private PointF minXY;
     private PointF maxXY;
+    private DbHelper dbHelper = new DbHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glu);
         session = new SessionManager(getApplicationContext());
-        glu_etLevel = (EditText) findViewById(R.id.et_glu_level);
-        glu_btUpdate = (Button) findViewById(R.id.bt_glu_update);
+        glu_btStart = (Button) findViewById(R.id.bt_glu_start);
+        glu_btStop = (Button) findViewById(R.id.bt_glu_stop);
         xyplot = (XYPlot) findViewById(R.id.glu_plot);
-        xyplot.setOnTouchListener(this);
+        //xyplot.setOnTouchListener(this);
         //xyplot.setMarkupEnabled(true);
         xyplot.getGraphWidget().setMarginTop(0);
         xyplot.setPlotMargins(0, 0, 0, 0);
         xyplot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, 20);
         xyplot.setRangeValueFormat(new DecimalFormat("0"));
-        xyplot.setRangeBoundaries(130, 250, BoundaryMode.FIXED);
+        xyplot.setRangeBoundaries(110, 230, BoundaryMode.FIXED);
         xyplot.getGraphWidget().setDomainLabelOrientation(-45);
-        getGluLevel();
-        glu_btUpdate.setOnClickListener(new View.OnClickListener() {
+        //getGluLevel();
+        //local_getGluLevel();
+        new LocalDbTask().execute();
+        glu_btStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String level = glu_etLevel.getText().toString().trim();
-                String devicetime = Long.toString((new Date()).getTime());
-                postGluLevel(level, devicetime);
-
+                Intent intent = new Intent(getApplicationContext(), PeriodicService.class);
+                startService(intent);
             }
         });
+        glu_btStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PeriodicService.class);
+                stopService(intent);
+            }
+        });
+    }
+
+    private class LocalDbTask extends AsyncTask<Void, Void, Void> {
+        private List<Pair<Float, Long>> values;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            values = dbHelper.getGlu();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            local_getGluLevel(values);
+        }
+    }
+
+    private void local_getGluLevel(List<Pair<Float, Long>> values) {
+        if(values.size() == 0) return;
+        xyplot.clear();
+        List<Number> level_list = new ArrayList<>();
+        List<Number> time_list = new ArrayList<>();
+        for(int i = 0; i < values.size(); i++) {
+            level_list.add(values.get(i).first);
+            time_list.add(values.get(i).second);
+        }
+        if(level_list.size() == 1) {
+            xyplot.setDomainBoundaries(time_list.get(0).longValue() - 100, time_list.get(0).longValue() + 100, BoundaryMode.FIXED);
+        }
+
+        XYSeries series = new SimpleXYSeries(time_list, level_list, "Glucose level");
+        xyplot.getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
+        PointLabelFormatter pointLabelFormatter = new PointLabelFormatter(Color.BLACK);
+        LineAndPointFormatter formatter = new LineAndPointFormatter(Color.rgb(0, 0, 0), Color.BLUE, Color.TRANSPARENT, pointLabelFormatter);
+                        if(level_list.size() > 3) {
+                            formatter.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Uniform));
+                        }
+//        if(level_list.size() <= 3) {
+//            xyplot.setOnTouchListener(null);
+//        }
+//        else {
+//            xyplot.setOnTouchListener(GluActivity.this);
+//        }
+        xyplot.addSeries(series, formatter);
+        xyplot.calculateMinMaxVals();
+        minXY = new PointF(xyplot.getCalculatedMinX().floatValue(), xyplot.getCalculatedMinY().floatValue());
+        maxXY = new PointF(xyplot.getCalculatedMaxX().floatValue(), xyplot.getCalculatedMaxY().floatValue());
+        leftX = minXY.x;
+        rightX = maxXY.x;
+        xyplot.setDomainStep(XYStepMode.SUBDIVIDE, 10);
+        //xyplot.setDomainBoundaries(maxXY.x - 43600000, maxXY.x, BoundaryMode.AUTO);
+
+        xyplot.setDomainValueFormat(new Format() {
+            private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            @Override
+            public StringBuffer format(Object o, StringBuffer stringBuffer, FieldPosition fieldPosition) {
+                Date date = new Date(((Number) o).longValue());
+                return dateFormat.format(date, stringBuffer, fieldPosition);
+            }
+
+            @Override
+            public Object parseObject(String s, ParsePosition parsePosition) {
+                return null;
+            }
+        });
+
+        xyplot.redraw();
+
     }
 
     private void getGluLevel() {
@@ -183,7 +265,7 @@ public class GluActivity extends AppCompatActivity implements View.OnTouchListen
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                         getGluLevel();
-                        glu_etLevel.setText("");
+
                     }
 
                 } catch (JSONException e) {

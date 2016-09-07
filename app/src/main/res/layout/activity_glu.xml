@@ -21,24 +21,19 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_weight="3">
-
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/et_glu_level"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:hint="Glucose level" />
-
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Update"
-            android:id="@+id/bt_glu_update"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:background="@android:color/holo_blue_light" />
+            android:text="Start tracking"
+            android:id="@+id/bt_glu_start"
+            android:background="@android:color/holo_blue_light"
+            android:layout_weight="1" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop tracking"
+            android:id="@+id/bt_glu_stop"
+            android:background="@android:color/holo_blue_light"
+            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

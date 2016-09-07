@@ -16,7 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.rhythm003.app.AppConfig;
 import com.rhythm003.app.AppController;
-import com.rhythm003.help.SQLiteHandler;
+
 import com.rhythm003.help.SessionManager;
 
 import org.json.JSONException;
@@ -31,7 +31,7 @@ public class RegActivity extends AppCompatActivity {
     private EditText etName;
     private Button btReg;
     private SessionManager session;
-    //private SQLiteHandler db;
+
     private static final String TAG = RegActivity.class.getSimpleName();
     //private ProgressDialog pDialog;
     @Override
@@ -50,7 +50,7 @@ public class RegActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
 
         // SQLite database handler
-        //db = new SQLiteHandler(getApplicationContext());
+
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {

@@ -28,6 +28,13 @@
             android:parentActivityName="com.rhythm003.type1.MainActivity"
             android:theme="@style/AppThemeAC" >
         </activity>
+        <receiver android:name="com.rhythm003.help.PeriodicReceiver" >
+            <intent-filter>
+                <action android:name="com.rhythm003.type1.PERI_TASK" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.rhythm003.help.DbService" />
+        <service android:name="com.rhythm003.help.PeriodicService" />
     </application>
 
 </manifest>
