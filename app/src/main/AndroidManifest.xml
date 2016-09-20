@@ -21,7 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity" />
+            android:name=".MainActivity" >
+            <intent-filter android:label="quickpredict/getJSON">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="quickpredict"
+                    android:host="fitbit" />
+            </intent-filter>
+        </activity>
         <activity android:name=".RegActivity" />
         <activity
             android:name=".GluActivity"

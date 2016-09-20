@@ -1,11 +1,14 @@
 package com.rhythm003.type1;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rhythm003.help.DbHelper;
 import com.rhythm003.help.DbService;
@@ -21,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+        if(data != null) {
+            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
+        }
         tvHello = (TextView) findViewById(R.id.tvHello);
         btGetLevel = (Button) findViewById(R.id.btGluLevel);
         btLogoff = (Button) findViewById(R.id.btLogoff);
@@ -48,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
         btSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, PeriodicService.class);
-                stopService(intent);
+                String url = "http://rhythm003.noip.me:8080/fitbitapi/signin.php";
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
             }
         });
     }
