@@ -25,6 +25,7 @@ import javax.microedition.khronos.opengles.GL;
 public class DbHelper extends SQLiteOpenHelper {
     private final static String DB_NAME = "type1_db";
     private final static String GLU_TABLE = "glu_table";
+    private final static String CAL_TABLE = "cal_table";
     private final static int DB_VER = 1;
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VER);
@@ -32,14 +33,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String CREATE_TABLE = "CREATE TABLE " + GLU_TABLE + "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+        String CREATE_GLU = "CREATE TABLE " + GLU_TABLE + "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "level FLOAT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, devicetime TEXT NOT NULL)";
-        sqLiteDatabase.execSQL(CREATE_TABLE);
+        String CREATE_CAL = "CREATE TABLE " + CAL_TABLE + "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "level INT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, intime TEXT NOT NULL)";
+        sqLiteDatabase.execSQL(CREATE_GLU);
+        sqLiteDatabase.execSQL(CREATE_CAL);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         String DROP_TABLE = "DROP TABLE IF EXISTS" + GLU_TABLE;
+        sqLiteDatabase.execSQL(DROP_TABLE);
+        DROP_TABLE = "DROP TABLE IF EXISTS" + CAL_TABLE;
         sqLiteDatabase.execSQL(DROP_TABLE);
         onCreate(sqLiteDatabase);
     }
@@ -71,5 +77,15 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         cursor.close();
         return values;
+    }
+
+    public void insertCal(int level, String intime) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("level", level);
+        values.put("intime", intime);
+        db.insert(CAL_TABLE, null, values);
+        db.close();
+        Log.d("DbHelper", "inserted" + level + intime);
     }
 }
