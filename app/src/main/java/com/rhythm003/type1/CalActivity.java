@@ -32,18 +32,16 @@ public class CalActivity extends AppCompatActivity {
         btn_fitbit = (Button) findViewById(R.id.cal_btn_fitbit);
         tp = (TimePicker) findViewById(R.id.cal_tp);
         Intent intent = getIntent();
-        Uri data = intent.getData();
-        if(data != null) {
+        String data = intent.getStringExtra("calories");
+        if(data != "") {
             //Toast.makeText(this, data.getQueryParameter("calories"), Toast.LENGTH_LONG).show();
-            et_cal.setText(data.getQueryParameter("calories"));
+            et_cal.setText(data);
         }
         btn_fitbit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://rhythm003.noip.me:8080/fitbitapi/signin.php";
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(CalActivity.this, Uri.parse(url));
+                Intent intent = new Intent(CalActivity.this, FitbitCalActivity.class);
+                startActivity(intent);
             }
         });
         btn_send.setOnClickListener(new View.OnClickListener() {

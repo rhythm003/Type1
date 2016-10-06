@@ -27,7 +27,9 @@ public class PeriodicReceiver extends BroadcastReceiver {
     }
     private void doPeriodicTask(Context context) {
         Log.d("PeriodicReceiver", "doTask");
-        Intent intent = new Intent(context, DbService.class);
+        Intent intent = new Intent(context, FitbitService.class);
+        context.startService(intent);
+        intent = new Intent(context, DbService.class);
         intent.putExtra("ACTION", "INSERT_GLU");
         Random random = new Random();
         intent.putExtra("LEVEL", new DecimalFormat("#.##").format(random.nextFloat() * 80 + 110));
@@ -55,5 +57,6 @@ public class PeriodicReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         alarmManager.cancel(pendingIntent);
         context.stopService(new Intent(context, DbService.class));
+        context.stopService(new Intent(context, FitbitService.class));
     }
 }

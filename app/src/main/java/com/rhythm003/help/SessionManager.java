@@ -54,6 +54,10 @@ public class SessionManager {
         editor.putString("USER_APIKEY", "");
         editor.commit();
     }
+    public void setToken(String token) {
+        editor.putString("TOKEN", token);
+        editor.commit();
+    }
     public String getUSER_NAME() {
         return pref.getString("USER_NAME", "");
     }
@@ -66,4 +70,5 @@ public class SessionManager {
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
+    public String getTOKEN() { return pref.getString("TOKEN", ""); }
 }

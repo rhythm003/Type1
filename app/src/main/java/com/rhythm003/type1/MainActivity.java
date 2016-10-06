@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         btSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                startActivity(intent);
             }
         });
         btCal.setOnClickListener(new View.OnClickListener() {

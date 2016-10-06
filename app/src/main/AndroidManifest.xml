@@ -20,14 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".RegActivity" />
         <activity
             android:name=".GluActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeAC"></activity>
+            android:theme="@style/AppThemeAC" />
 
         <receiver android:name="com.rhythm003.help.PeriodicReceiver">
             <intent-filter>
@@ -37,11 +35,18 @@
 
         <service android:name="com.rhythm003.help.DbService" />
         <service android:name="com.rhythm003.help.PeriodicService" />
-
-        <activity android:name=".CalActivity"
+        <service android:name="com.rhythm003.help.FitbitService" />
+        <activity
+            android:label="Calorie Intake"
+            android:name=".CalActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeAC"></activity>
+        <activity
+            android:label="Settings"
+            android:name=".SettingActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeAC">
-            <intent-filter android:label="quickpredict/getJSON">
+            <intent-filter android:label="quickpredict/AUTH">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -51,6 +56,13 @@
                     android:host="fitbit"
                     android:scheme="quickpredict" />
             </intent-filter>
+        </activity>
+        <activity
+            android:label="Fitbit Food log"
+            android:name=".FitbitCalActivity"
+            android:parentActivityName=".CalActivity"
+            android:theme="@style/AppThemeAC">
+
         </activity>
     </application>
 
