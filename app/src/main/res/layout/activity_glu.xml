@@ -22,18 +22,18 @@
         android:layout_height="fill_parent"
         android:layout_weight="3">
         <Button
+            style="@style/AppButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Start tracking"
             android:id="@+id/bt_glu_start"
-            android:background="@android:color/holo_blue_light"
             android:layout_weight="1" />
         <Button
+            style="@style/AppButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Stop tracking"
             android:id="@+id/bt_glu_stop"
-            android:background="@android:color/holo_blue_light"
             android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

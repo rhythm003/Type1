@@ -27,22 +27,25 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="4">
+
         <Button
+            style="@style/AppButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Glucose Record"
             android:layout_gravity="center"
             android:id="@+id/btGluLevel"
             android:layout_weight="1"
-            android:background="@android:color/holo_blue_light" />
+            android:elevation="0dp" />
+
         <Button
+            style="@style/AppButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Calorie Record"
             android:id="@+id/btCalLevel"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/holo_blue_light" />
+            android:layout_weight="1" />
 
 
     </LinearLayout>
@@ -53,21 +56,21 @@
         android:layout_height="fill_parent"
         android:layout_weight="4">
         <Button
+            style="@style/AppButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Settings"
             android:layout_gravity="center"
             android:id="@+id/btSetting"
-            android:layout_weight="1"
-            android:background="@android:color/holo_blue_light" />
+            android:layout_weight="1" />
         <Button
+            style="@style/AppButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Log off"
             android:id="@+id/btLogoff"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/holo_blue_light" />
+            android:layout_weight="1" />
 
 
     </LinearLayout>

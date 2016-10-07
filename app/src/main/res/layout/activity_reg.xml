@@ -47,11 +47,11 @@
         android:layout_gravity="center_horizontal" />
 
     <Button
+        style="@style/AppButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign up"
         android:id="@+id/btReg2"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/holo_blue_light" />
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

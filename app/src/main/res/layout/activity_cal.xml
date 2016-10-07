@@ -17,9 +17,10 @@
         android:id="@+id/cal_tp"
         android:layout_weight="1"
         style="@style/AppThemeAC"
-        android:amPmBackgroundColor="@android:color/holo_blue_dark"
-        android:headerBackground="@android:color/holo_blue_light"
-        android:numbersSelectorColor="?attr/colorPrimaryDark" />
+        android:amPmBackgroundColor="@color/colorSecondary"
+        android:headerBackground="@color/colorSecondary"
+        android:numbersTextColor="@color/colorPrimary"
+        android:numbersSelectorColor="@color/colorSecondary" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -37,20 +38,20 @@
             android:layout_weight="1" />
 
         <Button
+            style="@style/AppButton"
             android:text="Ok"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cal_btn_send"
-            android:layout_weight="3"
-            android:background="@android:color/holo_blue_light" />
+            android:layout_weight="3" />
     </LinearLayout>
 
     <Button
+        style="@style/AppButton"
         android:text="Get from Fitbit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cal_btn_fitbit"
-        android:layout_weight="1"
-        android:background="@android:color/holo_blue_light" />
+        android:layout_weight="1" />
 
 </LinearLayout>

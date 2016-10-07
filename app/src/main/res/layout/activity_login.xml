@@ -55,18 +55,18 @@
             android:layout_gravity="center_horizontal">
 
             <Button
+                style="@style/AppButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Login"
-                android:id="@+id/btLogin"
-                android:background="@android:color/holo_blue_light" />
+                android:id="@+id/btLogin" />
 
             <Button
+                style="@style/AppButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign up"
-                android:id="@+id/btReg"
-                android:background="@android:color/holo_blue_light" />
+                android:id="@+id/btReg" />
         </LinearLayout>
 
     </LinearLayout>

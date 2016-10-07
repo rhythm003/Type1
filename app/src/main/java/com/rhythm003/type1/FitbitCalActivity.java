@@ -107,7 +107,7 @@ public class FitbitCalActivity extends AppCompatActivity {
 
                     JSONObject jobj = new JSONObject(response);
                     JSONArray foodlog = jobj.getJSONArray("foods");
-                    if(foodlog.length() > 0) tvStatus.setText("Recent Foods: ");
+
                     for(int i = 0; i < foodlog.length(); i++) {
                         JSONObject temp = foodlog.getJSONObject(i).getJSONObject("loggedFood");
                         items.add(temp.getString("name"));
@@ -151,6 +151,7 @@ public class FitbitCalActivity extends AppCompatActivity {
 
                     JSONObject jobj = new JSONObject(response);
                     JSONArray foodlog = jobj.getJSONArray("foods");
+                    if(foodlog.length() > 0) tvStatus.setText("Recent Foods: ");
                     for(int i = 0; i < foodlog.length(); i++) {
                         JSONObject temp = foodlog.getJSONObject(i).getJSONObject("loggedFood");
                         items.add(temp.getString("name"));

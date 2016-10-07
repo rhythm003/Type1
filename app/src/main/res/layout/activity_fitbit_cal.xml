@@ -35,6 +35,7 @@
             android:layout_gravity="bottom" />
 
         <Button
+            style="@style/AppButton"
             android:text="Done"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -56,6 +57,7 @@
         android:layout_weight="1">
     </ListView>
     <Button
+        style="@style/AppButton"
         android:text="Add an entry in Fitbit"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"

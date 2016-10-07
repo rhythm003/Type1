@@ -18,6 +18,7 @@
         android:id="@+id/set_tvLink" />
 
     <Button
+        style="@style/AppButton"
         android:text="Connect with Fitbit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
