@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_heart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    tools:context="com.rhythm003.type1.GluActivity"
-    android:orientation="vertical">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.rhythm003.type1.HeartActivity">
     <com.androidplot.xy.XYPlot
         style="@style/APDefacto.Light"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:id="@+id/glu_plot"
+        android:id="@+id/heart_plot"
         android:layout_weight="1" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="3">
-
-    </LinearLayout>
 </LinearLayout>

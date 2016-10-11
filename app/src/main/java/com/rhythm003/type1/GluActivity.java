@@ -56,8 +56,6 @@ import java.util.TimerTask;
 public class GluActivity extends AppCompatActivity implements View.OnTouchListener{
     private static final String TAG = GluActivity.class.getSimpleName();
     private XYPlot xyplot;
-    private Button glu_btStart;
-    private Button glu_btStop;
     private SessionManager session;
     private float leftX;
     private float rightX;
@@ -69,8 +67,6 @@ public class GluActivity extends AppCompatActivity implements View.OnTouchListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glu);
         session = new SessionManager(getApplicationContext());
-        glu_btStart = (Button) findViewById(R.id.bt_glu_start);
-        glu_btStop = (Button) findViewById(R.id.bt_glu_stop);
         xyplot = (XYPlot) findViewById(R.id.glu_plot);
         //xyplot.setOnTouchListener(this);
         //xyplot.setMarkupEnabled(true);
@@ -83,20 +79,7 @@ public class GluActivity extends AppCompatActivity implements View.OnTouchListen
         //getGluLevel();
         //local_getGluLevel();
         new LocalDbTask().execute();
-        glu_btStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PeriodicService.class);
-                startService(intent);
-            }
-        });
-        glu_btStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PeriodicService.class);
-                stopService(intent);
-            }
-        });
+
     }
 
     private class LocalDbTask extends AsyncTask<Void, Void, Void> {

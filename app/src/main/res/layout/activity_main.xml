@@ -12,21 +12,23 @@
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Hello!"
         android:id="@+id/tvHello"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:gravity="center" />
-
+        android:gravity="left" />
+    <com.androidplot.xy.XYPlot
+        style="@style/APDefacto.Light"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:id="@+id/home_plot"
+        android:layout_weight="1" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="4">
+        android:layout_weight="3">
 
         <Button
             style="@style/AppButton"
@@ -36,7 +38,7 @@
             android:layout_gravity="center"
             android:id="@+id/btGluLevel"
             android:layout_weight="1"
-            android:elevation="0dp" />
+            tools:ignore="NestedWeights" />
 
         <Button
             style="@style/AppButton"
@@ -54,7 +56,15 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="4">
+        android:layout_weight="3">
+        <Button
+            style="@style/AppButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Heart Rate Record"
+            android:id="@+id/btHeart"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
         <Button
             style="@style/AppButton"
             android:layout_width="fill_parent"
@@ -62,16 +72,8 @@
             android:text="Settings"
             android:layout_gravity="center"
             android:id="@+id/btSetting"
-            android:layout_weight="1" />
-        <Button
-            style="@style/AppButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Log off"
-            android:id="@+id/btLogoff"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-
+            android:layout_weight="1"
+            tools:ignore="NestedWeights" />
 
     </LinearLayout>
 

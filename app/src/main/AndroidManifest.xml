@@ -22,12 +22,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Home"
-            />
+            android:label="Home" />
         <activity android:name=".RegActivity" />
         <activity
-            android:label="Glucose level"
             android:name=".GluActivity"
+            android:label="Glucose Level"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeAC" />
 
@@ -40,14 +39,15 @@
         <service android:name="com.rhythm003.help.DbService" />
         <service android:name="com.rhythm003.help.PeriodicService" />
         <service android:name="com.rhythm003.help.FitbitService" />
+
         <activity
-            android:label="Calorie Intake"
             android:name=".CalActivity"
+            android:label="Calorie Intake"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeAC"></activity>
+            android:theme="@style/AppThemeAC" />
         <activity
-            android:label="Settings"
             android:name=".SettingActivity"
+            android:label="Settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeAC">
             <intent-filter android:label="quickpredict/AUTH">
@@ -62,12 +62,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="Fitbit Food log"
             android:name=".FitbitCalActivity"
+            android:label="Fitbit Food Log"
             android:parentActivityName=".CalActivity"
-            android:theme="@style/AppThemeAC">
-
-        </activity>
+            android:theme="@style/AppThemeAC"></activity>
+        <activity
+            android:name=".HeartActivity"
+            android:label="Heart Rate"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeAC"></activity>
     </application>
 
 </manifest>

@@ -23,4 +23,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/set_btnFitbit" />
+    <TextView
+        android:text="Tracking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/set_tvTrack" />
+    <Button
+        style="@style/AppButton"
+        android:text="Start Tracking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/set_btnStartTrack" />
+
+    <Button
+        style="@style/AppButton"
+        android:text="Stop Tracking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/set_btnStopTrack" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+        <Button
+            style="@style/AppButton"
+            android:text="Log off"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/set_btnLogoff"
+            android:layout_gravity="bottom" />
+    </LinearLayout>
+
 </LinearLayout>

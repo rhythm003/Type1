@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rhythm003.app.AppConfig;
+import com.rhythm003.help.PeriodicService;
 import com.rhythm003.help.SessionManager;
 
 public class SettingActivity extends AppCompatActivity {
-    private Button btnFitbit;
+    private Button btnFitbit, btnLogoff, btnStartTrack, btnStopTrack;
     private SessionManager session;
     private TextView tvLink;
     @Override
@@ -45,6 +46,32 @@ public class SettingActivity extends AppCompatActivity {
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent intent = builder.build();
                 intent.launchUrl(SettingActivity.this, Uri.parse(AppConfig.FITBIT_TOKEN));
+            }
+        });
+        btnLogoff = (Button) findViewById(R.id.set_btnLogoff);
+        btnLogoff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                session.setLogoff();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        btnStartTrack = (Button) findViewById(R.id.set_btnStartTrack);
+        btnStopTrack = (Button) findViewById(R.id.set_btnStopTrack);
+        btnStartTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PeriodicService.class);
+                startService(intent);
+            }
+        });
+        btnStopTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PeriodicService.class);
+                stopService(intent);
             }
         });
     }
