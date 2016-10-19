@@ -14,8 +14,10 @@ Androidplot is used to plot the data
 
 http://androidplot.com/
 
-![Login screen](/screenshots/login.png)
-![Home screen](/screenshots/home screen.png)
-![Calorie input](/screenshots/calorie.png)
-![Calorie data from FitBit](/screenshots/fitbit.png)
-![Settings](/screenshots/settings.png)
+<p>
+<img src="/screenshots/login.png" width="350" />
+<img src="/screenshots/home screen.png" width="350" />
+<img src="/screenshots/calorie.png" width="350" />
+<img src="/screenshots/fitbit.png" width="350" />
+<img src="/screenshots/settings.png" width="350" />
+</p>
