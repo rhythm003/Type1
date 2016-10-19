@@ -13,3 +13,9 @@ http://www.androidhive.info/2014/01/how-to-create-rest-api-for-android-app-using
 Androidplot is used to plot the data
 
 http://androidplot.com/
+
+![Login screen](/screenshots/login.png)
+![Home screen](/screenshots/home screen.png)
+![Calorie input](/screenshots/calorie.png)
+![Calorie data from FitBit](/screenshots/fitbit.png)
+![Settings](/screenshots/settings.png)

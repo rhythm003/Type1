@@ -16,5 +16,5 @@ public class AppConfig {
 
     public static String FITBIT_CAL = "https://api.fitbit.com/1/user/-/foods/log/date/";
 
-    public static String FITBIT_HRATE = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1sec/time/00:00/00:01.json";
+    public static String FITBIT_HRATE = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1min.json";
 }
