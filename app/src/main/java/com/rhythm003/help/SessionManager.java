@@ -58,6 +58,12 @@ public class SessionManager {
         editor.putString("TOKEN", token);
         editor.commit();
     }
+
+    public void setRToken(String r_token) {
+        editor.putString("R_TOKEN", r_token);
+        editor.commit();
+    }
+
     public String getUSER_NAME() {
         return pref.getString("USER_NAME", "");
     }
@@ -70,5 +76,6 @@ public class SessionManager {
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
-    public String getTOKEN() { return pref.getString("TOKEN", ""); }
+    public String getToken() { return pref.getString("TOKEN", ""); }
+    public String getRToken() { return pref.getString("R_TOKEN", ""); }
 }

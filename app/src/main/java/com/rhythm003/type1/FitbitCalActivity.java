@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,9 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.SimpleFormatter;
 
 public class FitbitCalActivity extends AppCompatActivity {
     private SessionManager session;
@@ -129,7 +126,7 @@ public class FitbitCalActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> header = new HashMap<String, String>();
-                header.put("authorization", "Bearer " + session.getTOKEN());
+                header.put("authorization", "Bearer " + session.getToken());
                 return  header;
             }
         };
@@ -183,15 +180,16 @@ public class FitbitCalActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("GET RESPONSE", error.getMessage());
+                Log.e("GET RESPONSE", "BAD");
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> header = new HashMap<String, String>();
-                header.put("authorization", "Bearer " + session.getTOKEN());
+                header.put("authorization", "Bearer " + session.getToken());
                 return  header;
             }
+
         };
         AppController.getInstance().addToRequestQueue(strReq);
     }

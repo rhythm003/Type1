@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,13 +13,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.rhythm003.app.AppConfig;
 import com.rhythm003.app.AppController;
-import com.rhythm003.type1.FitbitCalActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +68,7 @@ public class FitbitService extends Service {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> header = new HashMap<String, String>();
-                header.put("authorization", "Bearer " + session.getTOKEN());
+                header.put("authorization", "Bearer " + session.getToken());
                 return  header;
             }
         };

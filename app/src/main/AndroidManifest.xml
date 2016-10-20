@@ -22,7 +22,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Home" />
+            android:label="Home"
+            android:screenOrientation="portrait"/>
         <activity android:name=".RegActivity" />
         <activity
             android:name=".GluActivity"
@@ -31,8 +32,9 @@
             android:theme="@style/AppThemeAC" />
 
         <receiver android:name="com.rhythm003.help.PeriodicReceiver">
-            <intent-filter>
+            <intent-filter android:label="com.rhythm003.Periodic">
                 <action android:name="com.rhythm003.type1.PERI_TASK" />
+
             </intent-filter>
         </receiver>
 
@@ -44,15 +46,17 @@
             android:name=".CalActivity"
             android:label="Calorie Intake"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeAC" />
+            android:theme="@style/AppThemeAC"
+            android:screenOrientation="portrait"/>
         <activity
+            android:launchMode="singleTop"
             android:name=".SettingActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeAC">
+            android:theme="@style/AppThemeAC"
+            android:screenOrientation="portrait">
             <intent-filter android:label="quickpredict/AUTH">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -65,12 +69,17 @@
             android:name=".FitbitCalActivity"
             android:label="Fitbit Food Log"
             android:parentActivityName=".CalActivity"
-            android:theme="@style/AppThemeAC"></activity>
+            android:theme="@style/AppThemeAC"
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity
             android:name=".HeartActivity"
             android:label="Heart Rate"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeAC"></activity>
+            android:theme="@style/AppThemeAC">
+            
+        </activity>
     </application>
 
 </manifest>
