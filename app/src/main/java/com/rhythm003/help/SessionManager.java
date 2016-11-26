@@ -2,6 +2,7 @@ package com.rhythm003.help;
 
 /**
  * Created by Rhythm003 on 7/25/2016.
+ * SessionManager stores information in private shared preferences, including the user name, email, apikey, Fitbit token...
  */
 import android.content.Context;
 import android.content.SharedPreferences;

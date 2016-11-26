@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+// Activity to select food log from Fitbit API.
 public class FitbitCalActivity extends AppCompatActivity {
     private SessionManager session;
     private ListView lvCal;
@@ -39,6 +39,7 @@ public class FitbitCalActivity extends AppCompatActivity {
     private TextView tvStatus, tvTotal;
     private Button btnDone, btnLaunchFitbit;
     private int total;
+    // Setup ui.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +71,7 @@ public class FitbitCalActivity extends AppCompatActivity {
             }
         });
     }
-
+    // Open Fitbit app if installed.
     private void launchFitbitApp() {
         PackageManager packageManager = getPackageManager();
         try {
@@ -89,6 +90,7 @@ public class FitbitCalActivity extends AppCompatActivity {
         }
     }
 
+    // Make Fitbit API call to get calorie record of today.
     private void getCal() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -133,6 +135,7 @@ public class FitbitCalActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq);
     }
 
+    // Make Fitbit API call to get calorie record of yesterday.
     private void getYesterCal() {
         Date date = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

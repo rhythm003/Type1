@@ -78,7 +78,7 @@
             android:label="Heart Rate"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeAC">
-            
+
         </activity>
     </application>
 

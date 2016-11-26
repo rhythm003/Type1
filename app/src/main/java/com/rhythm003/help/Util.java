@@ -9,6 +9,7 @@ import java.util.Properties;
 
 /**
  * Created by Rhythm003 on 10/20/2016.
+ * This Util class retrieves the Fitbit client secret in "fitbit.properties".
  */
 
 public class Util {

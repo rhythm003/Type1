@@ -9,6 +9,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Created by Rhythm003 on 7/25/2016.
+ * AppController uses Volley to make http calls
  */
 public class AppController extends Application{
     public static final String TAG = AppController.class.getSimpleName();

@@ -8,6 +8,7 @@ import android.util.Log;
 
 /**
  * Created by Rhythm003 on 9/6/2016.
+ * Background service to start PeriodicReciever
  */
 public class PeriodicService extends Service {
     PeriodicReceiver periodicReceiver = new PeriodicReceiver();

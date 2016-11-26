@@ -27,12 +27,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
+// Setting page.
 public class SettingActivity extends AppCompatActivity {
     private Button btnFitbit, btnLogoff, btnStartTrack, btnStopTrack;
     private SessionManager session;
     private TextView tvLink;
     private String code;
+    // Setup ui.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,7 @@ public class SettingActivity extends AppCompatActivity {
         if(session.getToken() != "") {
             tvLink.setText("Account connected");
         }
+        // Request user to login to Fitbit and authorize this app.
         btnFitbit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +93,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
-
+    // Volley request to get Fitbit token. Token stored using session manager.
     private void getToken() {
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -103,7 +105,7 @@ public class SettingActivity extends AppCompatActivity {
                     JSONObject json = new JSONObject(response);
                     session.setToken((String) json.get("access_token"));
                     session.setRToken((String) json.get("refresh_token"));
-//                    Log.d("TOKEN", session.getToken());
+                    Log.d("TOKEN", session.getToken());
 //                    Log.d("RTOKEN", session.getRToken());
                 }
                 catch (Exception e) {

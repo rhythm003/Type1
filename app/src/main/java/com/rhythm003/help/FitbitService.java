@@ -17,11 +17,14 @@ import com.rhythm003.app.AppController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Rhythm003 on 10/5/2016.
+ * Background service to make queries to Fitbit API
  */
 
 public class FitbitService extends Service {
@@ -40,20 +43,32 @@ public class FitbitService extends Service {
     }
 
     private void getHRate() {
-
+        // Setup Volley request
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.FITBIT_HRATE, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("HRATE RESPONSE", "got response");
+                //Log.d("HRATE RESPONSE", "got response");
                 try {
                     JSONObject jobj = new JSONObject(response);
                     JSONArray intraday = jobj.getJSONObject("activities-heart-intraday").getJSONArray("dataset");
-                    String out = "";
-                    for(int i = 0; i < intraday.length(); i++) {
-                        out += intraday.getJSONObject(i).getString("time") + " " + intraday.getJSONObject(i).getString("value") + " ";
+                    String day = jobj.getJSONArray("activities-heart").getJSONObject(0).getString("dateTime") + ":";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+                    // Get the most recent 5 intraday heart rate data.
+                    for(int i = 1; i < 6 && i < intraday.length(); i++) {
+                        try {
+                            Date date = simpleDateFormat.parse(day + intraday.getJSONObject(intraday.length() - i).getString("time"));
+                            Intent intent = new Intent(getApplicationContext(), DbService.class);
+                            intent.putExtra("ACTION", "INSERT_HR");
+                            intent.putExtra("LEVEL", intraday.getJSONObject(intraday.length() - i).getString("value"));
+                            intent.putExtra("INTIME", Long.toString(date.getTime()));
+                            startService(intent);
+                        }
+                        catch (Exception e) {
+                            Log.e("DBINSERT", e.getMessage());
+                        }
                     }
-                    Log.d("HRATE", out);
+                    if(intraday.length() == 0) Log.d("HRATE", "No data");
                 }
                 catch (Exception e) {
                     Log.e("HRATE", e.getMessage());

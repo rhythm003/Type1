@@ -25,7 +25,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
+// Activity to login to remote server. For testing purpose, type "test" as email and
+// tap login button will skip the authorization with remote server.
 public class LoginActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPass;
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     //private ProgressDialog pDialog;
+    // Setup ui.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = etEmail.getText().toString().trim();
                 String password = etPass.getText().toString().trim();
-
+                if(email.equals("test")) {
+                    session.setLogin("User", "Email", "Apikey");
+                    Intent intent = new Intent(LoginActivity.this,
+                            MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
                 // Check for empty data in the form
                 if (!email.isEmpty() && !password.isEmpty()) {
                     // login user

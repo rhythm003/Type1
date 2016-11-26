@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
+// Activity to register user in the remote server.
 public class RegActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPass;

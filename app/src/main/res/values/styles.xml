@@ -33,4 +33,13 @@
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_margin">2dp</item>
     </style>
+
+    <style name="AppDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:datePickerStyle">@style/AppDatePicker</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+    </style>
+    <style name="AppDatePicker" parent="@android:style/Widget.DatePicker">
+        <item name="android:headerBackground">@color/colorPrimary</item>
+    </style>
 </resources>

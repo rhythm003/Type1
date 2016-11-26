@@ -28,6 +28,7 @@ import java.util.Random;
 
 /**
  * Created by Rhythm003 on 9/6/2016.
+ * This receiver will call itself periodically in the background.
  */
 public class PeriodicReceiver extends BroadcastReceiver {
     private final static String TAG = "com.rhythm003.type1.PERI_TASK";
@@ -35,6 +36,7 @@ public class PeriodicReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         session = new SessionManager(context);
+        // Check the action of intent.
         if(intent.getAction() != null) {
             if(intent.getAction().equals(TAG)) {
                 doPeriodicTask(context);
@@ -45,18 +47,22 @@ public class PeriodicReceiver extends BroadcastReceiver {
             refreshToken(context);
         }
     }
+    // The operation being executed periodically.
     private void doPeriodicTask(Context context) {
         Log.d("PeriodicReceiver", "doTask");
-        Intent intent = new Intent(context, FitbitService.class);
+        Intent intent;
+        // Fitbit service.
+        intent = new Intent(context, FitbitService.class);
         context.startService(intent);
+        // Use DbService to insert glucose level.
         intent = new Intent(context, DbService.class);
         intent.putExtra("ACTION", "INSERT_GLU");
         Random random = new Random();
+        // Random glucose level generated here.
         intent.putExtra("LEVEL", new DecimalFormat("#.##").format(random.nextFloat() * 80 + 110));
         Long dt = new Date().getTime();
         intent.putExtra("DEVICETIME", dt);
         context.startService(intent);
-
     }
 
     public void restartTask(Context context) {
@@ -66,7 +72,8 @@ public class PeriodicReceiver extends BroadcastReceiver {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmIntent.setAction(TAG);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
-            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 300000, pendingIntent);
+            // Set the repeating alarm, 60000 = 1 minute.
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 60000, pendingIntent);
         }
     }
 
@@ -79,6 +86,7 @@ public class PeriodicReceiver extends BroadcastReceiver {
         context.stopService(new Intent(context, DbService.class));
         context.stopService(new Intent(context, FitbitService.class));
     }
+    // Refresh Fitbit token by making Volley call.
     private void refreshToken(final Context context) {
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -90,7 +98,7 @@ public class PeriodicReceiver extends BroadcastReceiver {
                     JSONObject json = new JSONObject(response);
                     session.setToken((String) json.get("access_token"));
                     session.setRToken((String) json.get("refresh_token"));
-                    //Log.d("TOKEN", session.getToken());
+                    Log.d("REFRESH TOKEN", "GOT NEW TOKEN");
                 }
                 catch (Exception e) {
                     Log.e("REFRESH TOKEN", e.getMessage());

@@ -8,6 +8,7 @@ import android.util.Log;
 
 /**
  * Created by Rhythm003 on 9/6/2016.
+ * DbService is a service that can be called in the background to make queries to sqlite database.
  */
 public class DbService extends Service {
     private DbHelper dbHelper = new DbHelper(this);
@@ -17,12 +18,17 @@ public class DbService extends Service {
         return null;
     }
 
+    // Depending on the action, DbService will call different functions in DbHelper
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getStringExtra("ACTION");
         if(action.equals("GET_GLU")) {
             Log.d("DbService", "GET_GLU");
             dbHelper.getGlu();
+        }
+        else if(action.equals("INSERT_HR")) {
+            Log.d("DbService", "INSERT_HR");
+            dbHelper.insertHR(Integer.parseInt(intent.getStringExtra("LEVEL")), intent.getStringExtra("INTIME"));
         }
         else if(action.equals("INSERT_GLU")) {
             Log.d("DbService", "INSERT_GLU");
